@@ -1,10 +1,11 @@
 <?php
 include 'connect.php';
 session_start();
-if (!isset($_SESSION['admin'])) header("location: login.php");
+if (!isset($_SESSION['admin']))
+  header('location: login.php');
 
-$leaderboard = mysqli_query($conn, "SELECT * FROM `users` where points is not null ORDER BY points DESC, lastseen DESC;");
-$deptleaderboard = mysqli_query($conn, "SELECT department FROM `users` GROUP BY department");
+$leaderboard = mysqli_query($conn, 'SELECT * FROM `users` where points is not null ORDER BY points DESC, lastseen DESC;');
+$deptleaderboard = mysqli_query($conn, 'SELECT department FROM `users` GROUP BY department');
 
 ?>
 <!DOCTYPE html>
@@ -75,8 +76,8 @@ $deptleaderboard = mysqli_query($conn, "SELECT department FROM `users` GROUP BY 
                 </thead>
                 <tbody>
                   <?php
-                  $sino = 1;
-                  while ($student = mysqli_fetch_assoc($leaderboard)) {
+                    $sino = 1;
+                    while ($student = mysqli_fetch_assoc($leaderboard)) {
                   ?>
                     <tr>
                       <td> <strong><?php echo $sino ?></strong></td>
@@ -84,15 +85,20 @@ $deptleaderboard = mysqli_query($conn, "SELECT department FROM `users` GROUP BY 
                       <td><?php echo $student['points'] ?></td>
                       <td><?php echo $student['department'] ?></td>
                       <td>
-                        <?php if ($student['place'] == '2027') echo 'First Year';
-                        elseif ($student['place'] == '2026') echo 'Second Year';
-                        elseif ($student['place'] == '2025') echo 'Third Year';
-                        elseif ($student['place'] == '2024') echo 'Fourth Year';
-                        ?>
+                        <?php
+                        if ($student['place'] == '2027')
+                          echo 'First Year';
+                        elseif ($student['place'] == '2026')
+                          echo 'Second Year';
+                        elseif ($student['place'] == '2025')
+                          echo 'Third Year';
+                        elseif ($student['place'] == '2024')
+                          echo 'Fourth Year';
+                                            ?>
                       </td>
                     </tr>
                   <?php $sino++;
-                  } ?>
+                    } ?>
                 </tbody>
               </table>
             </div>
@@ -114,8 +120,8 @@ $deptleaderboard = mysqli_query($conn, "SELECT department FROM `users` GROUP BY 
                 </thead>
                 <tbody>
                   <?php
-                  while ($dept = mysqli_fetch_assoc($deptleaderboard)) {
-                    $maxpoints = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `player_name` FROM `users` WHERE department = '{$dept['department']}' ORDER BY `points` DESC, `lastseen` DESC LIMIT 1;"))['player_name'];
+                    while ($dept = mysqli_fetch_assoc($deptleaderboard)) {
+                      $maxpoints = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `player_name` FROM `users` WHERE department = '{$dept['department']}' ORDER BY `points` DESC, `lastseen` DESC LIMIT 1;"))['player_name'];
                   ?>
                     <tr>
                       <td><?php echo $dept['department'] ?></td>

@@ -1,4 +1,5 @@
-<?php include 'access_check.php'; ?>
+<?php include 'access_check.php';
+?>
 
 <?php
 
@@ -6,485 +7,472 @@ $right = -1;
 
 include 'connect.php';
 
-$sid = $_SESSION['pid'];
+$sid = $_SESSION[ 'pid' ];
 
-$checkstart = mysqli_fetch_assoc(mysqli_query($conn, "SELECT `start_time` from users where pid='$sid';"))['start_time'];
-if ($checkstart == NULL)
-header('Location: startgame.php');
+$checkstart = mysqli_fetch_assoc( mysqli_query( $conn, "SELECT `start_time` from users where pid='$sid';" ) )[ 'start_time' ];
+if ( $checkstart == NULL )
+header( 'Location: startgame.php' );
 
-$nqres = mysqli_query($conn, "SELECT count(*) from responses where sid='$sid';");
+$nqres = mysqli_query( $conn, "SELECT count(*) from responses where sid='$sid';" );
 
-$qres = mysqli_fetch_array($nqres);
+$qres = mysqli_fetch_array( $nqres );
 
-$q = $qres[0] + 1;
+$q = $qres[ 0 ] + 1;
 
-if (isset($_GET['qid'])) {
-	$qid = (int) $_GET['qid'];
-	$response = strtoupper(trim($_GET['op']));
+if ( isset( $_GET[ 'qid' ] ) ) {
+    $qid = ( int ) $_GET[ 'qid' ];
+    $response = strtoupper( trim( $_GET[ 'op' ] ) );
 
-	$ans = mysqli_query($conn, "SELECT * FROM words where qid=$qid;");
+    $ans = mysqli_query( $conn, "SELECT * FROM words where qid=$qid;" );
 
-	$answer = mysqli_fetch_row($ans);
+    $answer = mysqli_fetch_row( $ans );
 
-	$sid = $_SESSION['pid'];
+    $sid = $_SESSION[ 'pid' ];
 
-	$ranswer = strtoupper($answer[1]);
+    $ranswer = strtoupper( $answer[ 1 ] );
 
-	$level = $answer[3];
+    $level = $answer[ 3 ];
 
-	$right = 1;
-	$marks = 100;
+    $right = 1;
+    $marks = 100;
 
-	if ($ranswer != $response) {
-		$marks = 0;
-		$right = 0;
-	}
+    if ( $ranswer != $response ) {
+        $marks = 0;
+        $right = 0;
+    }
 
-	$query = "insert into responses (sid, qid, answer,marks) values ('$sid', $qid, '$response', $marks)";
+    $query = "insert into responses (sid, qid, answer,marks) values ('$sid', $qid, '$response', $marks)";
 
-	mysqli_query($conn, $query);
+    mysqli_query( $conn, $query );
 }
 
-$nqres = mysqli_query($conn, "SELECT count(*) from responses where sid='$sid';");
+$nqres = mysqli_query( $conn, "SELECT count(*) from responses where sid='$sid';" );
 
-$qres = mysqli_fetch_array($nqres);
+$qres = mysqli_fetch_array( $nqres );
 
-$q = $qres[0] + 1;
+$q = $qres[ 0 ] + 1;
 
 ?>
 
 <!doctype html>
 
-<html class="sidebar-light fixed sidebar-left-collapsed">
+<html class = 'sidebar-light fixed sidebar-left-collapsed'>
 
 <head>
 
-	<?php include 'head.php'; ?>
+<?php include 'head.php';
+?>
 
-	<style>
-		td {
+<style>
+td {
 
-			color: #000000;
+    color: #000000;
 
-		}
+}
 
+.ui-pnotify.red .ui-pnotify-container {
 
+    background-color: #DC143C !important;
 
-		.ui-pnotify.red .ui-pnotify-container {
+    color: #ffffff;
 
-			background-color: #DC143C !important;
+    border: 0px;
 
-			color: #ffffff;
+}
 
-			border: 0px;
+.ui-pnotify.blue .ui-pnotify-container {
 
-		}
+    background-color: #0088cc !important;
 
+    color: #ffffff;
 
+    border: 0px;
 
-		.ui-pnotify.blue .ui-pnotify-container {
+}
 
-			background-color: #0088cc !important;
+.code {
 
-			color: #ffffff;
+    display: inline-block;
 
-			border: 0px;
+    overflow-wrap: break-word;
 
-		}
+    word-wrap: break-word;
 
+    text-align: left;
 
+}
+</style>
 
-		.code {
+<?php
 
-			display: inline-block;
+if ( $right == 1 ) {
+    ?>
 
-			overflow-wrap: break-word;
+    <script>
+    var audio = new Audio( 'sounds/ipl.mp3' );
 
-			word-wrap: break-word;
+    audio.play();
 
-			text-align: left;
+    var audio = new Audio( 'sounds/claps.mp3' );
 
-		}
-	</style>
+    audio.play();
+    </script>
 
+    <?php
+}
 
+if ( $right == 0 ) {
+    ?>
 
-	<?php
+    <script>
+    var audio = new Audio( 'sounds/aipaye.mp3' );
 
-		if ($right == 1) {
-	?>
+    audio.play();
+    </script>
 
+    <?php
+}
 
-
-		<script>
-			var audio = new Audio("sounds/ipl.mp3");
-
-			audio.play();
-
-			var audio = new Audio("sounds/claps.mp3");
-
-			audio.play();
-		</script>
-
-
-
-	<?php
-		}
-
-		if ($right == 0) {
-			?>
-
-
-
-		<script>
-			var audio = new Audio("sounds/aipaye.mp3");
-
-			audio.play();
-		</script>
-
-
-
-	<?php
-		}
-
-			?>
-
-
+?>
 
 </head>
 
 <body>
 
-	<section class="body">
+<section class = 'body'>
 
-		<?php include 'header.php'; ?>
+<?php include 'header.php';
+?>
 
-		<div class="inner-wrapper">
+<div class = 'inner-wrapper'>
 
-			<!-- start: sidebar -->
+<!-- start: sidebar -->
 
-			<?php include 'sidebar.php'; ?>
+<?php include 'sidebar.php';
+?>
 
-			<!-- end: sidebar -->
+<!-- end: sidebar -->
 
-			<section role="main" class="content-body">
+<section role = 'main' class = 'content-body'>
 
-				<header class="page-header">
+<header class = 'page-header'>
 
-					<h2>SRKR SPELL BEE</h2>
+<h2>SRKR SPELL BEE</h2>
 
-				</header>
+</header>
 
-				<?php
+<?php
 
-					if ($right == 1) {
-				?>
+if ( $right == 1 ) {
+    ?>
 
-					<div id="swinner" class="modal-block modal-header-color modal-block-primary">
+    <div id = 'swinner' class = 'modal-block modal-header-color modal-block-primary'>
 
-						<section class="card">
+    <section class = 'card'>
 
-							<header class="card-header">
+    <header class = 'card-header'>
 
-								<div class="card-actions">
+    <div class = 'card-actions'>
 
-									<a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+    <a href = '#' class = 'card-action card-action-toggle' data-card-toggle></a>
 
-									<a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+    <a href = '#' class = 'card-action card-action-dismiss' data-card-dismiss></a>
 
-								</div>
+    </div>
 
-								<h2 class="card-title">SRKR SPELL BEE ANSWER</h2>
+    <h2 class = 'card-title'>SRKR SPELL BEE ANSWER</h2>
 
-							</header>
+    </header>
 
-							<div class="card-body" style='text-align:center;'>
+    <div class = 'card-body' style = 'text-align:center;'>
 
-								<ul class="simple-bullet-list mb-3">
+    <ul class = 'simple-bullet-list mb-3'>
 
-									<img src="img/congrats.gif">
+    <img src = 'img/congrats.gif'>
 
-								</ul>
+    </ul>
 
-								<h5><b>YOUR ANSWER:</b> <?php echo $response; ?><br> <b>RIGHT ANSWER:</b> <?php echo $ranswer; ?></h5>
+    <h5><b>YOUR ANSWER:</b> <?php echo $response;
+    ?><br> <b>RIGHT ANSWER:</b> <?php echo $ranswer;
+    ?></h5>
 
-							</div>
+    </div>
 
-							<footer class="card-footer">
+    <footer class = 'card-footer'>
 
-								<div class="row">
+    <div class = 'row'>
 
-									<div class="col-md-12 text-right">
+    <div class = 'col-md-12 text-right'>
 
-										<button class="btn btn-success modal-dismiss"><a href="#" class="card-action card-action-dismiss" style='color:#ffffff;' data-card-dismiss> CLOSE</a></button>
+    <button class = 'btn btn-success modal-dismiss'><a href = '#' class = 'card-action card-action-dismiss' style = 'color:#ffffff;' data-card-dismiss> CLOSE</a></button>
 
-									</div>
+    </div>
 
-								</div>
+    </div>
 
-							</footer>
+    </footer>
 
+    </section>
 
+    </div>
 
-						</section>
+    <?php
+} else if ( $right == 0 ) {
+    ?>
 
-					</div>
+    <div id = 'srunner' class = 'modal-block modal-header-color modal-block-danger'>
 
-				<?php
-					} else if ($right == 0) {
-									?>
+    <section class = 'card'>
 
-					<div id="srunner" class="modal-block modal-header-color modal-block-danger">
+    <header class = 'card-header'>
 
-						<section class="card">
+    <div class = 'card-actions'>
 
-							<header class="card-header">
+    <a href = '#' class = 'card-action card-action-toggle' data-card-toggle></a>
 
-								<div class="card-actions">
+    <a href = '#' class = 'card-action card-action-dismiss' data-card-dismiss></a>
 
-									<a href="#" class="card-action card-action-toggle" data-card-toggle></a>
+    </div>
 
-									<a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
+    <h2 class = 'card-title'>SRKR SPELL BEE ANSWER</h2>
 
-								</div>
+    </header>
 
-								<h2 class="card-title">SRKR SPELL BEE ANSWER</h2>
+    <div class = 'card-body' style = 'text-align:center;'>
 
-							</header>
+    <ul class = 'simple-bullet-list mb-3'>
 
-							<div class="card-body" style='text-align:center;'>
+    <img src = 'img/fail.gif'>
 
-								<ul class="simple-bullet-list mb-3">
+    </ul>
 
-									<img src="img/fail.gif">
+    <h5><b>YOUR ANSWER:</b> <?php echo $response;
+    ?><br> <b>RIGHT ANSWER:</b> <?php echo $ranswer;
+    ?></h5>
 
-								</ul>
+    </div>
 
-								<h5><b>YOUR ANSWER:</b> <?php echo $response; ?><br> <b>RIGHT ANSWER:</b> <?php echo $ranswer; ?></h5>
+    <footer class = 'card-footer'>
 
-							</div>
+    <div class = 'row'>
 
-							<footer class="card-footer">
+    <div class = 'col-md-12 text-right'>
 
-								<div class="row">
+    <button class = 'btn btn-success modal-dismiss'><a href = '#' class = 'card-action card-action-dismiss' style = 'color:#ffffff;' data-card-dismiss> CLOSE</a></button>
 
-									<div class="col-md-12 text-right">
+    </div>
 
-										<button class="btn btn-success modal-dismiss"><a href="#" class="card-action card-action-dismiss" style='color:#ffffff;' data-card-dismiss> CLOSE</a></button>
+    </div>
 
-									</div>
+    </footer>
 
-								</div>
+    </section>
 
-							</footer>
+    </div>
 
-						</section>
+    <?php
+}
 
-					</div>
+?>
 
-				<?php
-					}
+<div class = 'row'>
 
-				?>
+<div class = 'col-xl-8'>
 
-				<div class='row'>
+<h5 class = 'font-weight-semibold text-dark text-uppercase mb-3 mt-3'>YOUR SPELL BEE WORD HERE</h5>
 
-					<div class="col-xl-8">
+<section class = 'card mt-4'>
 
-						<h5 class="font-weight-semibold text-dark text-uppercase mb-3 mt-3">YOUR SPELL BEE WORD HERE</h5>
+<div class = 'card-body'>
 
-						<section class="card mt-4">
+<?php
 
-							<div class="card-body">
+if ( $q <= 5 ) {
+    $bl = 1;
+    $be = 3;
+} else if ( $q <= 10 ) {
+    $bl = 4;
+    $be = 6;
+} else {
+    $bl = 7;
+    $be = 10;
+}
 
-								<?php
+if ( $q <= 15 ) {
+    echo "<h4 align='center' STYLE='COLOR:RED;'><B>YOUR QUESTION NO - $q</B></h4>";
 
-									if ($q <= 5) {
-										$bl = 1;
-										$be = 3;
-									} else if ($q <= 10) {
-										$bl = 4;
-										$be = 6;
-									} else {
-										$bl = 7;
-										$be = 10;
-									}
+    $ques = mysqli_query( $conn, "SELECT * FROM words where qid not in (select qid from responses where sid='$sid') and level between $bl and $be ORDER BY RAND() LIMIT 1;" );
 
-									if ($q <= 15) {
-										echo "<h4 align='center' STYLE='COLOR:RED;'><B>YOUR QUESTION NO - $q</B></h4>";
+    $qrow = mysqli_fetch_array( $ques );
 
-										$ques = mysqli_query($conn, "SELECT * FROM words where qid not in (select qid from responses where sid='$sid') and level between $bl and $be ORDER BY RAND() LIMIT 1;");
+    $qid = $qrow[ 'qid' ];
 
-										$qrow = mysqli_fetch_array($ques);
+    $ranswer = strtoupper( $qrow[ 'word' ] );
 
-										$qid = $qrow['qid'];
+    $question = $qrow[ 'meaning' ];
 
-										$ranswer = strtoupper($qrow['word']);
+    $lvl = $qrow[ 'level' ];
 
-										$question = $qrow['meaning'];
+    if ( $lvl <= 3 ) {
+        $level = 'Easy';
+    } else if ( $lvl <= 6 ) {
+        $level = 'Moderate';
+    } else if ( $lvl <= 10 ) {
+        $level = 'Difficult';
+    }
 
-										$lvl = $qrow['level'];
+    $opr = array( $qrow[ 'option1' ], $qrow[ 'option2' ], $qrow[ 'option3' ], $ranswer );
 
-										if ($lvl <= 3) {
-											$level = 'Easy';
-										} else if ($lvl <= 6) {
-											$level = 'Moderate';
-										} else if ($lvl <= 10) {
-											$level = 'Difficult';
-										}
+    shuffle( $opr );
 
-										$opr = array($qrow['option1'], $qrow['option2'], $qrow['option3'], $ranswer);
+    $option1 = strtoupper( $opr[ 0 ] );
 
-										shuffle($opr);
+    $option2 = strtoupper( $opr[ 1 ] );
 
-										$option1 = strtoupper($opr[0]);
+    $option3 = strtoupper( $opr[ 2 ] );
 
-										$option2 = strtoupper($opr[1]);
+    $option4 = strtoupper( $opr[ 3 ] );
 
-										$option3 = strtoupper($opr[2]);
+    echo "<div align='center'><h4><b>Word Meaning: </b>" . $question . '</h4></div>';
 
-										$option4 = strtoupper($opr[3]);
+    echo "<div align='center'><h4><b>Difficulty Level: </b>" . $level . "</h4></div><div align='center'>";
 
-										echo "<div align='center'><h4><b>Word Meaning: </b>" . $question . '</h4></div>';
+    echo "<button class='mb-1 mt-1 mr-1 btn btn-danger' onclick='spell_sound($qid);'><span style='color:#ffffff;'><i class='fas fa-volume-up'></i> SPELL WORD <i class='fas fa-play'></i></span></button>";
 
-										echo "<div align='center'><h4><b>Difficulty Level: </b>" . $level . "</h4></div><div align='center'>";
+    echo '<div>CLICK ON THE RIGHT SPELLING</div>';
 
-										echo "<button class='mb-1 mt-1 mr-1 btn btn-danger' onclick='spell_sound($qid);'><span style='color:#ffffff;'><i class='fas fa-volume-up'></i> SPELL WORD <i class='fas fa-play'></i></span></button>";
+    echo "<a href='dashboard.php?qid=$qid&op=$option1'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option1</button></a>";
 
+    echo "<a href='dashboard.php?qid=$qid&op=$option2'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option2</button></a>";
 
-										echo '<div>CLICK ON THE RIGHT SPELLING</div>';
+    echo "<a href='dashboard.php?qid=$qid&op=$option3'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option3</button></a>";
 
-										echo "<a href='dashboard.php?qid=$qid&op=$option1'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option1</button></a>";
+    echo "<a href='dashboard.php?qid=$qid&op=$option4'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option4</button></a>";
 
-										echo "<a href='dashboard.php?qid=$qid&op=$option2'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option2</button></a>";
+    echo '</div>';
+} else {
+    $points = mysqli_fetch_assoc( mysqli_query( $conn, "SELECT sum(marks) as points from responses where sid='$sid';" ) )[ 'points' ];
 
-										echo "<a href='dashboard.php?qid=$qid&op=$option3'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option3</button></a>";
+    mysqli_query( $conn, "UPDATE users set `points`=$points where pid='$sid';" );
 
-										echo "<a href='dashboard.php?qid=$qid&op=$option4'><button type='submit' class='mb-1 mt-1 mr-1 btn btn-primary'>$option4</button></a>";
+}
+if ( $q > 15 ) echo "<script> window.location = 'dashboard2.php'; </script>";
 
-										echo '</div>';
-									} else {
-										$points = mysqli_fetch_assoc(mysqli_query($conn, "SELECT sum(marks) as points from responses where sid='$sid';"))['points'];
+?>
 
-										mysqli_query($conn, "UPDATE users set `points`=$points where pid='$sid';");
+</div>
 
+</section>
 
-									}
-									if ($q > 15) echo "<script> window.location = 'dashboard2.php'; </script>";
+</div>
 
-								?>
+<div class = 'col-xl-4'>
 
-							</div>
+<h5 class = 'font-weight-semibold text-dark text-uppercase mb-3 mt-3'>LEADERBOARD</h5>
 
-						</section>
+<div class = 'row'>
 
-					</div>
+<div class = 'col-12'>
 
-					<div class="col-xl-4">
+<section class = 'card mb-4'>
 
-						<h5 class="font-weight-semibold text-dark text-uppercase mb-3 mt-3">LEADERBOARD</h5>
+<div class = 'card-body' id = 'lboard' align = 'center'>
 
-						<div class="row">
+</div>
 
-							<div class="col-12">
+</section>
 
-								<section class="card mb-4">
+</div>
 
-									<div class="card-body" id='lboard' align='center'>
+</div>
 
-									</div>
+</div>
 
-								</section>
+</div>
 
-							</div>
+</section>
 
-						</div>
+</div>
 
-					</div>
-				
-				</div>
+</section>
 
-			</section>
+</section>
 
-		</div>
+</div>
 
-	</section>
+<script src = 'vendor/jquery/jquery.js'></script>
 
-	</section>
+<script src = 'vendor/jquery-browser-mobile/jquery.browser.mobile.js'></script>
 
-	</div>
+<script src = 'vendor/popper/umd/popper.min.js'></script>
 
-	<script src="vendor/jquery/jquery.js"></script>
+<script src = 'vendor/bootstrap/js/bootstrap.js'></script>
 
-	<script src="vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
+<script src = 'vendor/common/common.js'></script>
 
-	<script src="vendor/popper/umd/popper.min.js"></script>
+<script src = 'vendor/nanoscroller/nanoscroller.js'></script>
 
-	<script src="vendor/bootstrap/js/bootstrap.js"></script>
+<script src = 'vendor/magnific-popup/jquery.magnific-popup.js'></script>
 
-	<script src="vendor/common/common.js"></script>
+<script src = 'vendor/jquery-placeholder/jquery-placeholder.js'></script>
 
-	<script src="vendor/nanoscroller/nanoscroller.js"></script>
+<script src = 'vendor/jquery-ui/jquery-ui.js'></script>
 
-	<script src="vendor/magnific-popup/jquery.magnific-popup.js"></script>
+<script src = 'vendor/jqueryui-touch-punch/jqueryui-touch-punch.js'></script>
 
-	<script src="vendor/jquery-placeholder/jquery-placeholder.js"></script>
+<script src = 'vendor/jquery-appear/jquery-appear.js'></script>
 
-	<script src="vendor/jquery-ui/jquery-ui.js"></script>
+<script src = 'vendor/owl.carousel/owl.carousel.js'></script>
 
-	<script src="vendor/jqueryui-touch-punch/jqueryui-touch-punch.js"></script>
+<script src = 'js/theme.js'></script>
 
-	<script src="vendor/jquery-appear/jquery-appear.js"></script>
+<script src = 'js/examples/examples.modals.js'></script>
 
-	<script src="vendor/owl.carousel/owl.carousel.js"></script>
+<script src = 'vendor/pnotify/pnotify.custom.js'></script>
 
-	<script src="js/theme.js"></script>
+<script src = 'js/theme.init.js'></script>
 
-	<script src="js/examples/examples.modals.js"></script>
+<script>
 
-	<script src="vendor/pnotify/pnotify.custom.js"></script>
+function spell_sound( id )
 
-	<script src="js/theme.init.js"></script>
+{
 
-	<script>
-		function spell_sound(id)
+    var audio = new Audio( 'sounds/machine/' + id + '.mp3' );
 
-		{
+    audio.play();
 
-			var audio = new Audio("sounds/machine/" + id + ".mp3");
+}
+</script>
 
-			audio.play();
+<script>
 
-		}
-	</script>
+function spell_human( id )
 
-	<script>
-		function spell_human(id)
+{
 
-		{
+    var audio = new Audio( 'sounds/human/' + id + '.mp3' );
 
-			var audio = new Audio("sounds/human/" + id + ".mp3");
+    audio.play();
 
-			audio.play();
+}
+</script>
 
-		}
-	</script>
+<script>
+var source = new EventSource( 'leaderboard3.php' );
 
-	<script>
-		var source = new EventSource("leaderboard3.php");
+source.onmessage = function( event ) {
 
-		source.onmessage = function(event) {
+    document.getElementById( 'lboard' ).innerHTML = event.data;
 
-			document.getElementById('lboard').innerHTML = event.data;
+}
+;
+</script>
 
-		};
-	</script>
+<br><br>
 
-	
-
-	<br><br>
-
-	<?php include 'footer.php'; ?>
+<?php include 'footer.php';
+?>
 
 </body>
 

@@ -1,9 +1,10 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin'])) header("location: login.php");
+if (!isset($_SESSION['admin']))
+  header('location: login.php');
 $admin = $_SESSION['admin'];
 
-include "connect.php";
+include 'connect.php';
 
 if (isset($_POST['addnewstudent'])) {
   $sname = $_POST['sname'];

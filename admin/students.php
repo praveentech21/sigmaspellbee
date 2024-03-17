@@ -1,10 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin'])) header("location: login.php");
+if (!isset($_SESSION['admin']))
+  header('location: login.php');
 
 include 'connect.php';
 
-$registrations = mysqli_query($conn, "SELECT * FROM `users`");
+$registrations = mysqli_query($conn, 'SELECT * FROM `users`');
 
 ?>
 
@@ -160,28 +161,44 @@ $registrations = mysqli_query($conn, "SELECT * FROM `users`");
                         </tr>
                       </thead>
                       <tbody>
-                        <?php while ($row = mysqli_fetch_array($registrations)) {
-                          $tresponces = mysqli_fetch_assoc(mysqli_query($conn, "SELECT count(*) FROM `responses` WHERE `sid` = '$row[regno]'"))['count(*)'];
+                        <?php
+                          while ($row = mysqli_fetch_array($registrations)) {
+                            $tresponces = mysqli_fetch_assoc(mysqli_query($conn, "SELECT count(*) FROM `responses` WHERE `sid` = '$row[regno]'"))['count(*)'];
                         ?>
                           <tr>
                             <td><strong><?php echo strtoupper($row['player_name']) ?></strong></td>
                             <td><?php echo strtoupper($row['regno']) ?></td>
                             <td><?php echo $row['department'] ?></td>
-                            <td><?php if ($row['place'] == '2027') echo "First Year";
-                                elseif ($row['place'] == '2026') echo "Second Year";
-                                elseif ($row['place'] == '2025') echo "Third Year";
-                                elseif ($row['place'] == '2024') echo "Fourth Year";
-                                ?></td>
-                            <td><?php if ($row['payment_status'] == '0') echo "Not Paid";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '0') echo "Payment Confirmed";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces == 0) echo "Go and Play";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces < 15) echo "Semi Played";
-                        elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces == 15) echo "Game Completed";
-                        elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces == '0') echo "Choose to Replay";
-                        elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces < '15') echo "Semi Replay";
-                        elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces == '15') echo "Replayed";
-                        else echo "Update Status";
-                        ?></td>
+                            <td><?php
+                            if ($row['place'] == '2027')
+                              echo 'First Year';
+                            elseif ($row['place'] == '2026')
+                              echo 'Second Year';
+                            elseif ($row['place'] == '2025')
+                              echo 'Third Year';
+                            elseif ($row['place'] == '2024')
+                              echo 'Fourth Year';
+                          ?></td>
+                            <td><?php
+                            if ($row['payment_status'] == '0')
+                              echo 'Not Paid';
+                            elseif ($row['payment_status'] == '1' and $row['status'] == '0')
+                              echo 'Payment Confirmed';
+                            elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces == 0)
+                              echo 'Go and Play';
+                            elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces < 15)
+                              echo 'Semi Played';
+                            elseif ($row['payment_status'] == '1' and $row['status'] == '1' and $tresponces == 15)
+                              echo 'Game Completed';
+                            elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces == '0')
+                              echo 'Choose to Replay';
+                            elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces < '15')
+                              echo 'Semi Replay';
+                            elseif ($row['payment_status'] > 1 and $row['status'] == '1' and $tresponces == '15')
+                              echo 'Replayed';
+                            else
+                              echo 'Update Status';
+                          ?></td>
                                 
                           </tr>
                         <?php } ?>

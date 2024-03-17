@@ -1,21 +1,22 @@
 <?php
 session_start();
 // Calculation for this Month
-if (empty($_SESSION['admin'])) header("location: login.php");
-include("connect.php");
+if (empty($_SESSION['admin']))
+  header('location: login.php');
+include ('connect.php');
 if (isset($_POST['getdetails'])) {
   $mobile = $_POST['mobile'];
   if (mysqli_num_rows(mysqli_query($conn, "SELECT pid FROM `users` WHERE `pid` = '$mobile'")) == 0) {
     echo "<script>alert('No such Student found.');</script>";
   } else {
-    $setstatus = $conn->prepare("UPDATE `users` SET `status`=1 WHERE `pid` = ?");
-    $setstatus->bind_param("s", $mobile);
+    $setstatus = $conn->prepare('UPDATE `users` SET `status`=1 WHERE `pid` = ?');
+    $setstatus->bind_param('s', $mobile);
     $setstatus->execute();
 
     if ($setstatus->execute()) {
-      echo "Update successful."; // Update was successful
+      echo 'Update successful.';  // Update was successful
     } else {
-      echo "Error updating: " . $setstatus->error; // Error occurred
+      echo 'Error updating: ' . $setstatus->error;  // Error occurred
     }
   }
 }
@@ -109,7 +110,7 @@ if (isset($_POST['getdetails'])) {
 
   </div>
   <!-- Content wrapper -->
-  <?php //include 'fotter.php'; 
+  <?php  // include 'fotter.php';
   ?>
 </body>
 

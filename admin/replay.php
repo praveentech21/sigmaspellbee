@@ -1,10 +1,11 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin'])) header("location: login.php");
+if (!isset($_SESSION['admin']))
+  header('location: login.php');
 
 include 'connect.php';
 
-$notpayed = mysqli_query($conn, "SELECT * FROM `users` WHERE `points` IS NOT NULL");
+$notpayed = mysqli_query($conn, 'SELECT * FROM `users` WHERE `points` IS NOT NULL');
 
 ?>
 
@@ -77,11 +78,16 @@ $notpayed = mysqli_query($conn, "SELECT * FROM `users` WHERE `points` IS NOT NUL
                   <td><strong><?php echo strtoupper($row['player_name']) ?></strong></td>
                   <td><?php echo strtoupper($row['regno']) ?></td>
                   <td><?php echo $row['department'] ?></td>
-                  <td><?php if ($row['place'] == '2027') echo "First Year";
-                      elseif ($row['place'] == '2026') echo "Second Year";
-                      elseif ($row['place'] == '2025') echo "Third Year";
-                      elseif ($row['place'] == '2024') echo "Fourth Year";
-                      ?></td>
+                  <td><?php
+  if ($row['place'] == '2027')
+    echo 'First Year';
+  elseif ($row['place'] == '2026')
+    echo 'Second Year';
+  elseif ($row['place'] == '2025')
+    echo 'Third Year';
+  elseif ($row['place'] == '2024')
+    echo 'Fourth Year';
+?></td>
                   <td>
                     <button type="button" class="btn rounded-pill btn-info confirm-game" data-toggle="modal" data-target="#confirmationModal" data-pid="<?php echo $row['pid']; ?>">
                       Replay

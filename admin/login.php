@@ -1,20 +1,20 @@
 <?php
 session_start();
-include("connect.php");
+include ('connect.php');
 
 if (!empty($_SESSION['admin'])) {
-  header("location: index.php");
+  header('location: index.php');
 }
 if (isset($_POST['submit'])) {
   $admin = $_POST['admin'];
   $pass = $_POST['pass'];
 
-  if($admin = "9052727402" and $pass = "sigma2k24"){
+  if ($admin = '9052727402' and $pass = 'sigma2k24') {
     $_SESSION['admin'] = $admin;
-    header("location: index.php");
+    header('location: index.php');
   }
-  else echo "<script>alert('Wrong Username or Password!');</script>";
-
+  else
+    echo "<script>alert('Wrong Username or Password!');</script>";
 }
 
 ?>
